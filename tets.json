@@ -1,0 +1,24 @@
+{
+    "aggregated": "some data",
+    "per_agent": [
+        {
+            "agent_name": "IngestAgent",
+            "outputs": [
+                "some idata"
+            ]
+        },
+
+        {
+            "agent_name": "ComplianceAgent",
+            "outputs": [
+                "some data"
+            ]
+        },
+        {
+            "agent_name": "IntegrationAgent",
+            "outputs": [
+                "✅ Jira creation complete.\n- Total test cases processed: 7\n- Jiras created: 7 → [SCRUM-127, SCRUM-128, SCRUM-129, SCRUM-130, SCRUM-131, SCRUM-132, SCRUM-133]\n- Failures: 0\n"
+            ]
+        }
+    ]
+}

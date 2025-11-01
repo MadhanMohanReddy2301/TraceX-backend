@@ -9,7 +9,8 @@ WORKDIR /app
 # copy requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
+ENV PORT=8080
+ENV HOST=0.0.0.0
 # copy app
 COPY . .
 

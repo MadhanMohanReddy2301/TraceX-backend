@@ -96,7 +96,6 @@ class BigQueryPlugin:
     MCP plugin exposing BigQuery operations over SSE.
 
     Tools:
-      - handle_command(cmd: dict) -> dispatches to select/dml/insert_rows
       - run_query(sql: str, max_results: Optional[int] | None) -> returns rows
       - run_dml(sql: str) -> returns rows_affected or job metadata
       - insert_rows(table: str, rows: List[dict]) -> inserts rows via insert_rows_json
@@ -160,27 +159,6 @@ class BigQueryPlugin:
             job = client.query(sql)
             _ = job.result(timeout=60)
             return {"ok": True, "rows_affected": getattr(job, "num_dml_affected_rows", None)}
-        except GoogleAPICallError as e:
-            return {"ok": False, "error": f"BigQuery API error: {e}"}
-        except Exception as e:
-            return {"ok": False, "error": str(e)}
-    @staticmethod
-    @mcp.tool()
-    def insert_rows(table: str, rows: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        Insert JSON-serializable rows into a table using insert_rows_json.
-
-        `table` should be a table ref like project.dataset.table or dataset.table if
-        project is provided.
-        """
-        try:
-            client = BigQueryPlugin._get_client()
-            errors = client.insert_rows_json(table, rows)
-            if errors:
-                return {"ok": False, "errors": errors}
-            return {"ok": True, "inserted": len(rows)}
-        except NotFound:
-            return {"ok": False, "error": f"table not found: {table}"}
         except GoogleAPICallError as e:
             return {"ok": False, "error": f"BigQuery API error: {e}"}
         except Exception as e:

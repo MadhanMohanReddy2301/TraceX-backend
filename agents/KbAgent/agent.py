@@ -8,8 +8,9 @@ from google.adk.tools import google_search
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 from dotenv import load_dotenv
-
 from agents.KbAgent.prompt.prompt_factory import PromptFactory
+from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
+from google.adk.tools.mcp_tool.mcp_toolset import SseConnectionParams
 
 load_dotenv()
 
@@ -22,12 +23,19 @@ class KbAgent:
         print(f"Initializing [🤖] : {AGENT_NAME}")
         agent_prompt = PromptFactory().get_agent_prompt()
 
+        # NEW: initialize MCPToolset for KbRag MCP server
+        kb_rag_mcp_url = os.getenv("KB_RAG_MCP_SERVER_URL")
+        mcp_toolset = McpToolset(
+            connection_params=SseConnectionParams(url=kb_rag_mcp_url),
+
+        )
+
         return Agent(
             name=AGENT_NAME,
             model=os.getenv("GEMINI_MODEL"),
-            description="Assistant that uses Google Search to answer questions.",
+            description="Assistant that uses RAG to answer questions.",
             instruction=agent_prompt,
-            tools=[google_search],
+            tools=[mcp_toolset],
             output_key="health_care_regulations"
         )
 

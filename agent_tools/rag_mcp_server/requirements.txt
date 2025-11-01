@@ -1,0 +1,4 @@
+python-docx>=1.2.0
+mcp
+python-dotenv
+google-cloud-aiplatform
